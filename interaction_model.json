@@ -1,0 +1,233 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "michigan dining",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "DiningHallMeal",
+                    "slots": [
+                        {
+                            "name": "Location",
+                            "type": "DiningHall",
+                            "samples": [
+                                "East Quad",
+                                "North Quad",
+                                "South Quad",
+                                "Mosher-Jordan",
+                                "Markley",
+                                "Burlsey"
+                            ]
+                        },
+                        {
+                            "name": "Meal",
+                            "type": "Meal",
+                            "samples": [
+                                "Dinner",
+                                "Lunch",
+                                "Breakfast"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "what will i find for {Meal} at {Location} today",
+                        "what is the {Meal} at {Location} today",
+                        "what is for {Meal} at {Location}",
+                        "what the menu is at {Location}",
+                        "what will I find for {Meal} at {Location}",
+                        "what sounds good for {Meal} at {Location}",
+                        "what sounds good for {Meal}",
+                        "what sounds good at {Location}",
+                        "what will I find at {Location}",
+                        "what's for {Meal} ",
+                        "what's the menu at {Location}",
+                        "what's for {Meal} at {Location}"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "Meal",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Late Night"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Light Lunch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Dinner"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Lunch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Breakfast"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "DiningHall",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Twigs at Oxford",
+                                "synonyms": [
+                                    "Oxford"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "North Quad"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Bursley"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "East Quad"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "South Quad",
+                                "synonyms": [
+                                    "Squad"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mosher-Jordan",
+                                "synonyms": [
+                                    "Mojo"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Markley"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "DiningHallMeal",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "Location",
+                            "type": "DiningHall",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.751934810455.597906381730"
+                            },
+                            "validations": [
+                                {
+                                    "type": "hasEntityResolutionMatch",
+                                    "prompt": "Slot.Validation.739550899948.1478222517098.1251565963163"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Meal",
+                            "type": "Meal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.751934810455.1111010260088"
+                            },
+                            "validations": [
+                                {
+                                    "type": "hasEntityResolutionMatch",
+                                    "prompt": "Slot.Validation.739550899948.1259404993564.134566941769"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.751934810455.1111010260088",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which meal would you like a menu for?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.751934810455.597906381730",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which location do you want a menu for?"
+                    }
+                ]
+            },
+            {
+                "id": "Slot.Validation.739550899948.1478222517098.1251565963163",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Oops... {Location} doesn't serve food at the University of Michigan. Which dining hall are you interested in?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "I'm sorry. {Location} doesnt seem to be a dining hall at the University of Michigan. Which dining hall are you interested in?"
+                    }
+                ]
+            },
+            {
+                "id": "Slot.Validation.739550899948.1259404993564.134566941769",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "I'm sorry, {Meal} doesnt seem to be a valid meal. Try breakfast, lunch, or dinner. Which meal are you interested in?"
+                    }
+                ]
+            }
+        ]
+    }
+}
