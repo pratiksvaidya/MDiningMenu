@@ -23,15 +23,15 @@ menu = dict()
 for hall in dining_halls:
     if hall.text == 'Select Access':
         continue
-    
+
     driver.get(hall['href'])
     soup = BeautifulSoup(driver.page_source, features='html.parser')
-    
+
     course_names = soup.find('div', id='mdining-items').findAll('h3')
     course_info = soup.find('div', id='mdining-items').findAll('div', class_='courses')
 
     hall_menu = dict()
-    
+
     for i in range(len(course_info)):
         items = course_info[i].findAll('div', class_='item-name')
 
@@ -39,10 +39,10 @@ for hall in dining_halls:
             items[j] = items[j].text.strip()
 
         hall_menu[course_names[i].text.strip()] = items
-        
-    
+
+
     menu[hall.text.strip()] = hall_menu
-    
+
 driver.close()
 
 # Store data to firebase db
@@ -51,8 +51,8 @@ db = firestore.Client(project='michigan-dining-menu')
 locations_ref = db.collection('locations')
 
 for hall in menu.keys():
-    hall_ref = locations_ref.document(hall)
-    
+    hall_ref = locations_ref.document(hall.title())
+
     for course in menu[hall].keys():
         course_ref = hall_ref.collection(datetime.now().strftime('%Y-%m-%d')).document(course)
         course_ref.set({
