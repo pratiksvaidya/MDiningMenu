@@ -1,60 +1,60 @@
-from bs4 import BeautifulSoup
 from datetime import datetime
-from google.cloud import firestore
+from bs4 import BeautifulSoup
 import requests
+from google.cloud import firestore
 import selenium.webdriver as webdriver
 
-# Get dining hall locations
+def main():
+    # Get dining hall locations
+    michigan_dining = "https://dining.umich.edu/menus-locations/dining-halls/"
+    request = requests.get(michigan_dining)
 
-michigan_dining = "https://dining.umich.edu/menus-locations/dining-halls/"
-request = requests.get(michigan_dining)
+    soup = BeautifulSoup(request.text, "html.parser")
 
-soup = BeautifulSoup(request.text, "html.parser")
+    dining_halls = soup.find('ul', id='contentnavlist').findAll('a', class_='level_2')
 
-dining_halls = soup.find('ul',id='contentnavlist').findAll('a', class_='level_2')
+    # Get menu for each dining hall
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('headless')
+    driver = webdriver.Chrome(options=chrome_options)
 
-# Get menu for each dining hall
+    menu = dict()
+    for hall in dining_halls:
+        if hall.text == 'Select Access':
+            continue
 
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument('headless')
-driver = webdriver.Chrome(options=chrome_options)
+        driver.get(hall['href'])
+        soup = BeautifulSoup(driver.page_source, features='html.parser')
 
-menu = dict()
-for hall in dining_halls:
-    if hall.text == 'Select Access':
-        continue
+        course_names = soup.find('div', id='mdining-items').findAll('h3')
+        course_info = soup.find('div', id='mdining-items').findAll('div', class_='courses')
 
-    driver.get(hall['href'])
-    soup = BeautifulSoup(driver.page_source, features='html.parser')
+        hall_menu = dict()
 
-    course_names = soup.find('div', id='mdining-items').findAll('h3')
-    course_info = soup.find('div', id='mdining-items').findAll('div', class_='courses')
+        for i, course in enumerate(course_info):
+            items = course.findAll('div', class_='item-name')
 
-    hall_menu = dict()
+            for j, item in enumerate(items):
+                items[j] = item.text.strip()
 
-    for i in range(len(course_info)):
-        items = course_info[i].findAll('div', class_='item-name')
+            hall_menu[course_names[i].text.strip()] = items
 
-        for j in range(len(items)):
-            items[j] = items[j].text.strip()
+        menu[hall.text.strip()] = hall_menu
 
-        hall_menu[course_names[i].text.strip()] = items
+    driver.close()
 
+    # Store data to firebase db
+    database = firestore.Client(project='michigan-dining-menu')
+    locations_ref = database.collection('locations')
 
-    menu[hall.text.strip()] = hall_menu
+    for hall in menu:
+        hall_ref = locations_ref.document(hall.title())
 
-driver.close()
+        for course in menu[hall]:
+            course_ref = hall_ref.collection(datetime.now().strftime('%Y-%m-%d')).document(course)
+            course_ref.set({
+                'items': menu[hall][course]
+            })
 
-# Store data to firebase db
-
-db = firestore.Client(project='michigan-dining-menu')
-locations_ref = db.collection('locations')
-
-for hall in menu.keys():
-    hall_ref = locations_ref.document(hall.title())
-
-    for course in menu[hall].keys():
-        course_ref = hall_ref.collection(datetime.now().strftime('%Y-%m-%d')).document(course)
-        course_ref.set({
-            'items': menu[hall][course]
-        })
+if __name__ == "__main__":
+    main()
