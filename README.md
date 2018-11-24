@@ -1,7 +1,7 @@
 # Michigan Dining: Alexa Skill to Retrieve Menus
 
 ## About
-This is a skill for Amazon Alexa that allows you to ask for menus for the dining hall locations at the University of Michigan. The data is gathered by scraping the Michigan Dining website as it gets updated each day.
+This is a skill for Amazon Alexa that allows you to ask for menus for the dining hall locations at the University of Michigan. The data is gathered by scraping the Michigan Dining website as it gets updated each day and stored in a Cloud Firestore database.
 
 ### Supported Actions
 
