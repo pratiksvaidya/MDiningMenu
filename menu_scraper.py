@@ -26,35 +26,41 @@ def main():
         driver.get(hall['href'])
         soup = BeautifulSoup(driver.page_source, features='html.parser')
 
-        course_names = soup.find('div', id='mdining-items').findAll('h3')
-        course_info = soup.find('div', id='mdining-items').findAll('div', class_='courses')
+        courses = dict()
+        courses_elements = soup.find('div', id='mdining-items').findAll('div', class_='courses')
+        for course in courses_elements:
+            meal = course.previous_sibling.previous_sibling.text.strip()
+            courses[meal] = dict()
 
-        hall_menu = dict()
+            stations_elements = course.findAll('h4')
+            for station in stations_elements:
+                station_name = station.text.strip()
+                courses[meal][station_name] = list()
 
-        for i, course in enumerate(course_info):
-            items = course.findAll('div', class_='item-name')
+                item_elements = station.next_sibling.next_sibling.findAll('div', class_='item-name')
+                for item in item_elements:
+                    item_name = item.text.strip()
+                    courses[meal][station_name].append(item_name)
 
-            for j, item in enumerate(items):
-                items[j] = item.text.strip()
-
-            hall_menu[course_names[i].text.strip()] = items
-
-        menu[hall.text.strip()] = hall_menu
+        menu[hall.text.strip()] = courses
 
     driver.close()
 
     # Store data to firebase db
     database = firestore.Client(project='michigan-dining-menu')
-    locations_ref = database.collection('locations')
+    date = datetime.now().strftime('%Y-%m-%d')
+    halls_ref = database.collection(date)
 
     for hall in menu:
-        hall_ref = locations_ref.document(hall.title())
+        hall_ref = halls_ref.document(hall.title())
 
-        for course in menu[hall]:
-            course_ref = hall_ref.collection(datetime.now().strftime('%Y-%m-%d')).document(course)
-            course_ref.set({
-                'items': menu[hall][course]
-            })
+        for meal in menu[hall]:
+            meal_ref = hall_ref.collection(meal)
+
+            for station in menu[hall][meal]:
+                meal_ref.document(station).set({
+                    'items': menu[hall][meal][station]
+                })
 
 if __name__ == "__main__":
     main()

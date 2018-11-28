@@ -46,9 +46,20 @@
                                 "Lunch",
                                 "Breakfast"
                             ]
+                        },
+                        {
+                            "name": "Station",
+                            "type": "DiningHallStation"
                         }
                     ],
                     "samples": [
+                        "what {Station} is serving for {Meal} at {Location} ",
+                        "what {Station} is serving for {Meal} at {Location} today",
+                        "what's {Station} serving in {Location} ",
+                        "what's {Station} serving at {Location} ",
+                        "what's {Station} serving for {Meal} at {Location} today ",
+                        "what's {Station} serving for {Meal} at {Location} ",
+                        "what's for {Meal} at {Station} in {Location}",
                         "what will i find for {Meal} at {Location} today",
                         "what is the {Meal} at {Location} today",
                         "what is for {Meal} at {Location}",
@@ -143,6 +154,194 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "DiningHallStation",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "24 Carrots"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Baked Goods"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Breads and Rolls"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Church Street Deli"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Dessert"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Duffield Street Deli"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Farmers Table Blue"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Farmers Table Maize"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Finale"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Flavors"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Grill",
+                                "synonyms": [
+                                    "the grill"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Homestyles"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Homestyles Blue"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Homestyles Maize"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Hot Cereal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kosher"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Madison Street Deli"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Main Dish"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Olive Branch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Palmer Field Deli"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pizza and Pasta"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pizzeria"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pizziti"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Sabroso"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Signature"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Signature Blue"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Signature Maize"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Smoke"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Soup"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Sushi"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Toast"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Two Oceans"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Wild Fire"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "World Palate"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "World Palate Blue"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "World Palate Maize"
+                            }
+                        }
+                    ]
                 }
             ]
         },
@@ -182,6 +381,13 @@
                                     "prompt": "Slot.Validation.739550899948.1259404993564.134566941769"
                                 }
                             ]
+                        },
+                        {
+                            "name": "Station",
+                            "type": "DiningHallStation",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
                         }
                     ]
                 }

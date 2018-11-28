@@ -33,25 +33,46 @@ def build_simple_card(title, body):
 # Process Data
 ##############################
 
-def build_request_url(meal, location):
+def build_request_url(meal, location, station):
     now = datetime.now() - timedelta(hours=5)
     date = now.strftime('%Y-%m-%d')
 
-    return f'https://firestore.googleapis.com/v1beta1/projects/michigan-dining-menu/databases/(default)/documents/locations/{location}/{date}/{meal}'
+    if station:
+        return f'https://firestore.googleapis.com/v1beta1/projects/michigan-dining-menu/databases/(default)/documents/{date}/{location}/{meal}/{station}'
+    
+    return f'https://firestore.googleapis.com/v1beta1/projects/michigan-dining-menu/databases/(default)/documents/{date}/{location}/{meal}'
 
-def get_data(url):
+def get_data(url, station):
     request = requests.get(url).json()
-    return request['fields']['items']['arrayValue']['values']
 
-def build_menu_response(meal, location):
-    url = build_request_url(meal, location)
-    data = get_data(url)
+    if station:
+        return [(station, request['fields']['items']['arrayValue']['values'])]
+    
+    station_data = request['documents']
+    stations = list()
+    for station in station_data:
+        name = station['name'].split('/')[-1]
+        items = station['fields']['items']['arrayValue']['values']
+        stations.append((name, items))
+
+    return stations
+
+def build_menu_response(meal, location, station=None):
+    url = build_request_url(meal, location, station)
+    data = get_data(url, station)
 
     response = "Here is the " + meal + " menu at " + location + " today: "
-    for item in data:
-        response = response + item['stringValue'] + ", "
+    for station in data:
+        name = station[0]
+        items = station[1]
 
-    return response[:-2]
+        response = response + 'The ' + name + ' station is serving '
+        for item in items:
+            response = response + item['stringValue'] + ", "
+
+        response = response[:-2] + '. '
+
+    return response[:-1]
 
 ##############################
 # Responses
@@ -96,9 +117,15 @@ def dining_hall_meal_intent(event, context):
         meal = event['request']['intent']['slots']['Meal']['value'].title()
         location = event['request']['intent']['slots']['Location']['resolutions'] \
                         ['resolutionsPerAuthority'][0]['values'][0]['value']['name'].title()
+        
+        if 'value' in event['request']['intent']['slots']['Station']:
+            station = event['request']['intent']['slots']['Station']['resolutions'] \
+                        ['resolutionsPerAuthority'][0]['values'][0]['value']['name'].title()
+        else:
+            station = None
 
         title = meal + ' at ' + location
-        menu = build_menu_response(meal, location)
+        menu = build_menu_response(meal, location, station)
 
         return statement(title, menu)
 
