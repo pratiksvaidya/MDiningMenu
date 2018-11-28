@@ -53,6 +53,10 @@
                         }
                     ],
                     "samples": [
+                        "what's {Station} serving in {Location} ",
+                        "what's {Station} serving at {Location} ",
+                        "what's {Station} serving for {Meal} at {Location} today ",
+                        "what's {Station} serving for {Meal} at {Location} ",
                         "what's for {Meal} at {Station} in {Location}",
                         "what will i find for {Meal} at {Location} today",
                         "what is the {Meal} at {Location} today",
