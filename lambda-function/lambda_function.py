@@ -45,6 +45,9 @@ def build_request_url(meal, location, station):
 def get_data(url, station):
     request = requests.get(url).json()
 
+    if 'error' in request:
+        return []
+
     if station:
         return [(station, request['fields']['items']['arrayValue']['values'])]
     
@@ -60,6 +63,12 @@ def get_data(url, station):
 def build_menu_response(meal, location, station=None):
     url = build_request_url(meal, location, station)
     data = get_data(url, station)
+
+    if len(data) == 0:
+        if station:
+            return "Sorry, we don't have any information about the " + station + " station's " + meal + " menu at " + location + " today."
+
+        return "Sorry, we don't have any information about " + meal + " at " + location + " today."
 
     response = "Here is the " + meal + " menu at " + location + " today: "
     for station in data:
