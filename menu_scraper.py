@@ -19,6 +19,7 @@ def main():
     driver = webdriver.Chrome(options=chrome_options)
 
     menu = dict()
+    item_search = dict()
     for hall in dining_halls:
         if hall.text == 'Select Access':
             continue
@@ -41,6 +42,11 @@ def main():
                 for item in item_elements:
                     item_name = item.text.strip()
                     courses[meal][station_name].append(item_name)
+
+                    if item_name in item_search:
+                        item_search[item_name].append({'hall': hall.text, 'meal': meal, 'station': station_name})
+                    else:
+                        item_search[item_name] = [{'hall': hall.text, 'meal': meal, 'station': station_name}]
 
         menu[hall.text.strip()] = courses
 
