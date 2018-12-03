@@ -167,8 +167,8 @@ def stop_intent():
 
 
 def on_launch(event, context):
-    return statement("Welcome to Michigan Dining!", \
-                     "You can ask me for today's menu for any UM location!")
+    return conversation("Welcome to Michigan Dining!", \
+                        "You can ask me for today's menu for any UM location!", {})
 
 
 ##############################
