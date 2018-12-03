@@ -147,18 +147,21 @@ def dining_hall_meal_intent(event, context):
 
 
 def cancel_intent():
-    # NOTE: don't use CancelIntent as title it causes code reference error during certification
-    return statement("CancelIntent", "You want to cancel")
+    title = "Exit Michigan Dining"
+    body = "Thanks for using the Michigan Dining skill on Alexa! Have a great day!"
+    return statement(title, body)
 
 
 def help_intent():
-    # NOTE: same here don't use CancelIntent
-    return statement("CancelIntent", "You want help")
+    title = "Michigan Dining Help"
+    body = "Looking for help? Try asking for the menu at a UM dining hall. For example, you can ask, What's for dinner at Mojo today?"
+    return conversation(title, body, {})
 
 
 def stop_intent():
-    # NOTE: here also don't use StopIntent
-    return statement("StopIntent", "You want to stop")
+    title = "Exit Michigan Dining"
+    body = "Thanks for using the Michigan Dining skill on Alexa! Have a great day!"
+    return statement(title, body)
 
 
 ##############################
@@ -167,8 +170,9 @@ def stop_intent():
 
 
 def on_launch(event, context):
-    return conversation("Welcome to Michigan Dining!", \
-                        "You can ask me for today's menu for any UM location!", {})
+    title = "Welcome to Michigan Dining!"
+    body = "You can ask me for today's menu for any UM location. Give it a try!"
+    return conversation(title, body, {})
 
 
 ##############################
