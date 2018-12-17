@@ -55,8 +55,9 @@ def main():
     # Store data to firebase db
     database = firestore.Client(project='michigan-dining-menu')
     date = datetime.now().strftime('%Y-%m-%d')
-    halls_ref = database.collection(date)
 
+    # Items by Location
+    halls_ref = database.collection('beta', date, 'halls')
     for hall in menu:
         hall_ref = halls_ref.document(hall.title())
 
@@ -67,6 +68,21 @@ def main():
                 meal_ref.document(station).set({
                     'items': menu[hall][meal][station]
                 })
+
+    # Locations by Item
+    for item_name, locations in item_search.items():
+        if '/' in item_name:
+            # TODO: handle item names containing "/w"
+            continue
+
+        item_ref = database.document('beta', date, 'items', item_name.title())
+        item_ref.set({loc['hall']: loc for loc in locations})
+        
+        # item_ref.set({
+        #     'hall': [loc['hall'] for loc in locations],
+        #     'meal': [loc['meal'] for loc in locations],
+        #     'station': [loc['station'] for loc in locations]
+        # })
 
 if __name__ == "__main__":
     main()
