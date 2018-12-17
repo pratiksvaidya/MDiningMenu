@@ -73,6 +73,29 @@
                         "what's the menu at {Location}",
                         "what's for {Meal} at {Location}"
                     ]
+                },
+                {
+                    "name": "ItemSearch",
+                    "slots": [
+                        {
+                            "name": "item",
+                            "type": "AMAZON.Food",
+                            "samples": [
+                                "{item}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "Where can I find a {item}",
+                        "Where I can find a {item}",
+                        "Where I can find {item}",
+                        "Where I'll find a {item}",
+                        "Where I'll find {item}",
+                        "Where can I find {item}",
+                        "Where can I find an {item}",
+                        "Where I can find an {item}",
+                        "Where I'll find an {item}"
+                    ]
                 }
             ],
             "types": [
@@ -390,6 +413,22 @@
                             "prompts": {}
                         }
                     ]
+                },
+                {
+                    "name": "ItemSearch",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "item",
+                            "type": "AMAZON.Food",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.330172590319.798766730665"
+                            }
+                        }
+                    ]
                 }
             ]
         },
@@ -431,6 +470,19 @@
                     {
                         "type": "PlainText",
                         "value": "I'm sorry, {Meal} doesnt seem to be a valid meal. Try breakfast, lunch, or dinner. Which meal are you interested in?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.330172590319.798766730665",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What kind of food are you looking for"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "What are you looking for"
                     }
                 ]
             }
