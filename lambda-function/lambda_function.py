@@ -33,7 +33,7 @@ def build_simple_card(title, body):
 # Process Data
 ##############################
 
-def build_request_url(meal, location, station):
+def build_menu_url(meal, location, station):
     now = datetime.now() - timedelta(hours=5)
     date = now.strftime('%Y-%m-%d')
 
@@ -42,7 +42,13 @@ def build_request_url(meal, location, station):
     
     return f'https://firestore.googleapis.com/v1beta1/projects/michigan-dining-menu/databases/(default)/documents/{date}/{location}/{meal}'
 
-def get_data(url, station):
+def build_item_url(item):
+    now = datetime.now() - timedelta(hours=5)
+    date = now.strftime('%Y-%m-%d')
+
+    return f'https://firestore.googleapis.com/v1beta1/projects/michigan-dining-menu/databases/(default)/documents/beta/{date}/items/{item}'
+
+def get_menu_data(url, station):
     request = requests.get(url).json()
 
     if 'error' in request:
@@ -60,9 +66,25 @@ def get_data(url, station):
 
     return stations
 
+def get_item_data(url):
+    request = requests.get(url).json()
+
+    if 'error' in request:
+        return []
+
+    location_data = request['fields']
+    locations = list()
+    for location in location_data.items():
+        name = location[0]
+        station = location[1]['mapValue']['fields']['station']['stringValue'] 
+        meal = location[1]['mapValue']['fields']['meal']['stringValue']
+        locations.append([name, station, meal])
+    
+    return locations
+
 def build_menu_response(meal, location, station=None):
-    url = build_request_url(meal, location, station)
-    data = get_data(url, station)
+    url = build_menu_url(meal, location, station)
+    data = get_menu_data(url, station)
 
     if len(data) == 0:
         if station:
@@ -82,6 +104,23 @@ def build_menu_response(meal, location, station=None):
         response = response[:-2] + '. '
 
     return response[:-1]
+
+def build_item_search_response(item):
+    url = build_item_url(item)
+    data = get_item_data(url)
+
+    if len(data) == 0:
+        return 'Sorry, ' + item + ' doesn\'t seem to be served today at any Michigan Dining locations.'
+    
+    response = 'Here are the locations where ' + item + ' are being served today: '
+    for location in data:
+        name = location[0]
+        station = location[1]
+        meal = location[2]
+
+        response = response + ' ' + name + '\'s ' + station + ' station during ' + meal + ', '
+
+    return response[:-2]
 
 ##############################
 # Responses
@@ -140,6 +179,22 @@ def dining_hall_meal_intent(event, context):
 
     return statement("dining_hall_meal_intent", "No dialog")
 
+def item_search_intent(event, context):
+    dialog_state = event['request']['dialogState']
+
+    if dialog_state in ("STARTED", "IN_PROGRESS"):
+        return continue_dialog()
+
+    elif dialog_state == "COMPLETED":
+        item = event['request']['intent']['slots']['item']['value'].title()
+        
+        title = 'Where can I find ' + item + ' today?'
+        locations = build_item_search_response(item)
+
+        return statement(title, locations)
+
+    return statement("item_search_intent", "No dialog")
+
 
 ##############################
 # Required Intents
@@ -187,6 +242,9 @@ def intent_router(event, context):
 
     if intent == "DiningHallMeal":
         return dining_hall_meal_intent(event, context)
+
+    if intent == "ItemSearch":
+        return item_search_intent(event, context)
 
     # Required Intents
 
