@@ -7,6 +7,7 @@ This is a skill for Amazon Alexa that allows you to ask for menus for the dining
 
 - Ask for the meal at a specific dining hall
 - Ask for the meal at a specific station within a dining hall
+- Ask where you can find an item across all the dining halls and their stations
 
 ### Example Commands
 Ask Michigan Dining...
@@ -16,5 +17,7 @@ Ask Michigan Dining...
 - What will I find at (Markley)?
 - What's for (dinner) at (the Grill) in (Mojo)?
 - What's (Homestyles) serving for (dinner) at (Oxford)?
+- Where I'll find (Chicken Tenders)
+- Where I can find (Chocolate Chunk Cookies)
 
 Instead of providing the exact verbiage here for each command, I strive to make the experience as natural as I can. Simply try asking for what you want in a way that feels _right_ to you.  If a particular phrase doesn't work and you think it should, file an issue and I'll see what I can do to accommodate the phrase you prefer.
