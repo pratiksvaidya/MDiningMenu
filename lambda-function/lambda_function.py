@@ -112,6 +112,7 @@ def build_item_search_response(item):
     if len(data) == 0:
         return 'Sorry, ' + item + ' doesn\'t seem to be served today at any Michigan Dining locations.'
     
+    # TODO: Handle singular/plural items in response
     response = 'Here are the locations where ' + item + ' are being served today: '
     for location in data:
         name = location[0]
