@@ -38,9 +38,9 @@ def build_menu_url(meal, location, station):
     date = now.strftime('%Y-%m-%d')
 
     if station:
-        return f'https://firestore.googleapis.com/v1beta1/projects/michigan-dining-menu/databases/(default)/documents/{date}/{location}/{meal}/{station}'
+        return f'https://firestore.googleapis.com/v1beta1/projects/michigan-dining-menu/databases/(default)/documents/beta/{date}/halls/{location}/{meal}/{station}'
     
-    return f'https://firestore.googleapis.com/v1beta1/projects/michigan-dining-menu/databases/(default)/documents/{date}/{location}/{meal}'
+    return f'https://firestore.googleapis.com/v1beta1/projects/michigan-dining-menu/databases/(default)/documents/beta/{date}/halls/{location}/{meal}'
 
 def build_item_url(item):
     now = datetime.now() - timedelta(hours=5)
